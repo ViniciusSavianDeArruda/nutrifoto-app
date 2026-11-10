@@ -2,7 +2,7 @@
 
 ## Este projeto (NutriFoto)
 
-Diário alimentar com foto. Leia `PRODUCT.md` (o que e para quem) e `DESIGN.md` (visual) antes de mexer na interface.
+Diário alimentar com foto. Leia `docs/product.md` (o que e para quem) e `docs/design.md` (visual) antes de mexer na interface.
 
 ```
 apps/worker  API: TypeScript + Hono + Drizzle, Cloudflare Workers.  npm test | npm run typecheck | npm run dev | npm run migrate | npm run invite
@@ -23,66 +23,8 @@ Regras do projeto:
 
 ---
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+## Diretrizes de comportamento
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+Surfaça dúvidas antes de implementar; peça confirmação quando houver mais de uma interpretação. Escreva o mínimo de código que resolve o problema — sem abstrações especulativas, sem features não pedidas. Toque só o que a tarefa exige; não melhore código adjacente. Para tarefas de múltiplos passos, estabeleça critérios verificáveis antes de começar e confirme cada passo.
 
-## 1. Think Before Coding
-
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
-
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
-
-## 2. Simplicity First
-
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-## 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-
----
-
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+Diretrizes completas: `.claude/skills/karpathy-guidelines`
