@@ -1,0 +1,34 @@
+name = "nutrifoto-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Hyperdrive: pool de conexões com o Postgres do Supabase (grátis no plano Free).
+# Crie com:  npx wrangler hyperdrive create nutrifoto-db --connection-string "<Session pooler do Supabase, porta 5432>"
+# e cole o id abaixo. Em `wrangler dev`, a conexão local vem de localConnectionString.
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "COLE_O_ID_DO_HYPERDRIVE_AQUI"
+localConnectionString = "postgresql://postgres:postgres@127.0.0.1:5432/nutrifoto"
+
+[vars]
+ENVIRONMENT = "production"
+REGISTRATION_MODE = "invite"         # open (qualquer um) | invite (só com código: `npm run invite`) | closed (ninguém)
+ALLOW_REGISTRATION = "true"          # "false" fecha o cadastro de vez, acima de REGISTRATION_MODE
+APP_URL = "https://seu-app.pages.dev"   # endereço do front (vai nos links dos e-mails)
+MAIL_FROM = "NutriFoto <onboarding@resend.dev>"   # com domínio verificado no Resend: "NutriFoto <oi@seudominio.com>"
+CORS_ORIGINS = "https://seu-app.pages.dev"
+APP_TIMEZONE = "America/Sao_Paulo"
+DAILY_AI_LIMIT = "20"
+MAX_UPLOAD_MB = "8"
+STORAGE_QUOTA_MB = "1024"
+AI_PROVIDER = "gemini"               # gemini | mock
+GEMINI_MODEL = ""                    # o nome do modelo vem sempre daqui
+STORAGE_BACKEND = "supabase"         # supabase | memory (memory só para desenvolvimento: as fotos somem ao reiniciar)
+PUBLIC_API_URL = "https://nutrifoto-api.SEU-USUARIO.workers.dev"
+SUPABASE_URL = ""
+SUPABASE_BUCKET = "meal-photos"
+
+# Segredos (NÃO ficam neste arquivo). Cadastre com `npx wrangler secret put NOME`:
+#   JWT_SECRET, GEMINI_API_KEY, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY (e-mails)
+# Em desenvolvimento, coloque-os em apps/worker/.dev.vars

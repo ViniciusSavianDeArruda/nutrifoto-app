@@ -90,7 +90,6 @@ GEMINI_MODEL=nome-do-modelo
 ```
 
 O nome do modelo **nunca está no código**: você define em `GEMINI_MODEL`. Se usar a mesma chave/projeto e o mesmo modelo de outro projeto seu, as duas aplicações **dividem a mesma cota** (o limite é por projeto do Google Cloud e por modelo). Para separar, crie outro projeto no Google AI Studio ou use outro modelo.
-Para Anthropic: `AI_PROVIDER=anthropic`, `ANTHROPIC_API_KEY` e `ANTHROPIC_MODEL`. A chave da API Anthropic é paga por uso e é diferente da assinatura do Claude.
 
 ## Colocar no ar (grátis): Supabase + Cloudflare
 
@@ -116,7 +115,7 @@ npx wrangler hyperdrive create nutrifoto-db --connection-string="<session pooler
 #   copie o "id" que ele imprimir e cole em wrangler.toml, em [[hyperdrive]] id = "..."
 npx wrangler secret put JWT_SECRET                 # um texto longo e aleatório
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-npx wrangler secret put GEMINI_API_KEY             # ou ANTHROPIC_API_KEY
+npx wrangler secret put GEMINI_API_KEY
 npx wrangler secret put RESEND_API_KEY             # e-mails de senha/confirmação (veja "E-mails" abaixo)
 ```
 
@@ -188,9 +187,8 @@ Arquivos de exemplo (copie, sem segredos reais): `.env.example` (docker compose)
 | `STORAGE_BACKEND` | `supabase` ou `memory` | não (padrão `memory`) | `memory` | `supabase` |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Storage | **sim com `supabase`** | vazias | `[vars]` e `wrangler secret put` |
 | `SUPABASE_BUCKET` | Storage | não (padrão `meal-photos`) | `meal-photos` | `meal-photos` |
-| `AI_PROVIDER` | `gemini`, `anthropic` ou `mock` | não (padrão `gemini`) | `gemini` ou `mock` | `gemini` |
+| `AI_PROVIDER` | `gemini` ou `mock` | não (padrão `gemini`) | `gemini` ou `mock` | `gemini` |
 | `GEMINI_API_KEY`, `GEMINI_MODEL` | IA | só para usar a análise por foto | **você preenche** | `wrangler secret put` / `[vars]` |
-| `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` | IA (opcional) | só com `anthropic` | vazias | idem |
 | `RESEND_API_KEY` | e-mails reais | não (sem ela, e-mails simulados fora de produção; em produção o app esconde "esqueci a senha") | vazia | `wrangler secret put` |
 | `MAIL_FROM` | remetente | não | padrão | domínio verificado no Resend |
 | `APP_TIMEZONE`, `DAILY_AI_LIMIT`, `MAX_UPLOAD_MB`, `STORAGE_QUOTA_MB` | limites (número inválido dá erro) | não | padrões | `[vars]` |

@@ -12,8 +12,7 @@ export interface Env {
   AI_PROVIDER?: string;
   GEMINI_API_KEY?: string;
   GEMINI_MODEL?: string;
-  ANTHROPIC_API_KEY?: string;
-  ANTHROPIC_MODEL?: string;
+
   STORAGE_BACKEND?: string;
   PUBLIC_API_URL?: string;
   SUPABASE_URL?: string;
@@ -37,8 +36,7 @@ export interface Config {
   aiProvider: string;
   geminiApiKey: string;
   geminiModel: string;
-  anthropicApiKey: string;
-  anthropicModel: string;
+
   storageBackend: string;
   publicApiUrl: string;
   supabaseUrl: string;
@@ -71,8 +69,7 @@ export function loadConfig(env: Env): Config {
     aiProvider: env.AI_PROVIDER || "gemini",
     geminiApiKey: env.GEMINI_API_KEY || "",
     geminiModel: env.GEMINI_MODEL || "",
-    anthropicApiKey: env.ANTHROPIC_API_KEY || "",
-    anthropicModel: env.ANTHROPIC_MODEL || "",
+
     storageBackend: env.STORAGE_BACKEND || "memory",
     publicApiUrl: (env.PUBLIC_API_URL || "http://localhost:8787").replace(/\/$/, ""),
     supabaseUrl: (env.SUPABASE_URL || "").replace(/\/$/, ""),

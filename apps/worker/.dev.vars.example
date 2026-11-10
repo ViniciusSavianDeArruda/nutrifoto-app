@@ -1,0 +1,58 @@
+# Copie para .dev.vars: cp .dev.vars.example .dev.vars
+# Usado pelo `wrangler dev` (e pelo docker compose). Nunca vai para o Git.
+# Em produção estas variáveis ficam em wrangler.toml [vars] (públicas) ou em `npx wrangler secret put NOME` (segredos).
+
+# --- Ambiente ---
+# development liga o ConsoleMailer: os e-mails (recuperar senha, confirmar e-mail) aparecem no log do worker.
+ENVIRONMENT=development
+
+# --- Segurança ---
+# Assina as sessões. Gere com: openssl rand -hex 32   (trocar derruba todas as sessões)
+JWT_SECRET=troque-isto-por-um-segredo-longo-e-aleatorio
+
+# --- Endereços ---
+# Origens do front autorizadas no CORS, separadas por vírgula.
+CORS_ORIGINS=http://localhost:5173
+# Endereço público da API; entra nas URLs das fotos. Local: http://localhost:8787
+PUBLIC_API_URL=http://localhost:8787
+# Endereço do front, usado nos links dos e-mails.
+APP_URL=http://localhost:5173
+
+# --- Cadastro ---
+# open (qualquer um) | invite (só com código: npm run invite) | closed (ninguém)
+REGISTRATION_MODE=open
+# "false" fecha o cadastro de vez, acima de REGISTRATION_MODE.
+ALLOW_REGISTRATION=true
+
+# --- Fotos ---
+# memory = fotos na memória do worker (somem ao reiniciar; só desenvolvimento) | supabase
+STORAGE_BACKEND=memory
+# Só com STORAGE_BACKEND=supabase: Project URL e chave service_role (Supabase > Project Settings > API) e o bucket privado.
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_BUCKET=meal-photos
+
+# --- IA ---
+# gemini | mock (mock devolve uma análise de exemplo, sem chave nem internet)
+AI_PROVIDER=gemini
+# Chave do Google AI Studio: https://aistudio.google.com/apikey
+GEMINI_API_KEY=
+# O nome do modelo nunca fica no código: defina aqui (ex.: o modelo de visão do Gemini que você usa).
+GEMINI_MODEL=
+
+# --- E-mail ---
+# Chave do Resend (resend.com). Vazia em desenvolvimento = e-mails simulados no log.
+RESEND_API_KEY=
+MAIL_FROM=NutriFoto <onboarding@resend.dev>
+
+# --- Limites ---
+APP_TIMEZONE=America/Sao_Paulo
+# Análises de IA por pessoa por dia
+DAILY_AI_LIMIT=20
+MAX_UPLOAD_MB=8
+STORAGE_QUOTA_MB=1024
+
+# --- Banco ---
+# Não vai aqui: o Worker lê o binding HYPERDRIVE. Local, informe a conexão em
+# WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE (o docker compose já faz isso).
+# Os scripts `npm run migrate` e `npm run invite` leem DATABASE_URL do ambiente do shell.
