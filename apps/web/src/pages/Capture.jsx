@@ -107,7 +107,7 @@ export default function Capture() {
                 aria-selected={mode === id}
                 onClick={() => { setMode(id); setError(null); }}
                 className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-md border font-semibold ${
-                  mode === id ? "border-night bg-night text-white dark:text-night-deep" : "border-line bg-surface"
+                  mode === id ? "border-night bg-night text-white" : "border-line bg-surface"
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" /> {label}
