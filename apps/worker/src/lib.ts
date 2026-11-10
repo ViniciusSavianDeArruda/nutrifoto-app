@@ -152,6 +152,14 @@ export function totalColumns(items: ItemIn[]) {
   return { totalKcal: t.kcal, totalProteinG: t.protein_g, totalCarbsG: t.carbs_g, totalFatG: t.fat_g, totalFiberG: t.fiber_g };
 }
 
+export async function insertMealRow(db: Db, values: typeof meals.$inferInsert, items: ItemIn[]): Promise<MealRow> {
+  return db.transaction(async (tx) => {
+    const [meal] = await tx.insert(meals).values(values).returning();
+    if (items.length) await tx.insert(mealItems).values(itemRows(items).map((r) => ({ ...r, mealId: meal!.id })));
+    return meal!;
+  });
+}
+
 export const toItemIn = (i: MealItemRow): ItemIn => ({
   name: i.name, grams: i.grams, kcal: i.kcal, protein_g: i.proteinG, carbs_g: i.carbsG, fat_g: i.fatG,
   fiber_g: i.fiberG, confidence: i.confidence as ItemIn["confidence"], edited_by_user: i.editedByUser,

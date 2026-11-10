@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { ApiError } from "../errors";
 import { checkRate } from "../limiter";
 import {
-  aiUsedToday, attachItems, getProvider, getStorage, intParam, itemRows, loadMeal, mealOut, mealSummaries,
+  aiUsedToday, attachItems, getProvider, getStorage, insertMealRow, intParam, itemRows, loadMeal, mealOut, mealSummaries,
   readImage, readJson, registerAiUse, toItemIn, totalColumns, type AppEnv, type Ctx, type Img,
 } from "../lib";
 import { requireUser } from "../middleware";
@@ -91,18 +91,11 @@ mealsRouter.post("/", async (c) => {
   }
 
   try {
-    const row = await db.transaction(async (tx) => {
-      const [meal] = await tx
-        .insert(meals)
-        .values({
-          userId: user.id, eatenAt: body.eaten_at ?? new Date(), mealType: body.meal_type, notes: body.notes ?? null,
-          aiStatus: body.ai_status, aiProvider: body.ai_provider ?? null, photoPath, thumbPath, photoBytes,
-          ...totalColumns(body.items),
-        })
-        .returning();
-      if (body.items.length) await tx.insert(mealItems).values(itemRows(body.items).map((r) => ({ ...r, mealId: meal!.id })));
-      return meal!;
-    });
+    const row = await insertMealRow(db, {
+      userId: user.id, eatenAt: body.eaten_at ?? new Date(), mealType: body.meal_type, notes: body.notes ?? null,
+      aiStatus: body.ai_status, aiProvider: body.ai_provider ?? null, photoPath, thumbPath, photoBytes,
+      ...totalColumns(body.items),
+    }, body.items);
     return c.json(await mealOut((await attachItems(db, [row]))[0]!, storage), 201);
   } catch (e) {
     await storage.delete(uploaded).catch(() => {});
@@ -195,16 +188,9 @@ mealsRouter.post("/:id/duplicate", async (c) => {
   const src = await loadMeal(db, user.id, idParam(c));
   let items = src.items.map(toItemIn);
   if (body.scale !== 1) items = scaleItems(items, body.scale);
-  const row = await db.transaction(async (tx) => {
-    const [meal] = await tx
-      .insert(meals)
-      .values({
-        userId: user.id, eatenAt: body.eaten_at ?? new Date(), mealType: src.meal.mealType, notes: src.meal.notes,
-        aiStatus: "manual", ...totalColumns(items),
-      })
-      .returning();
-    if (items.length) await tx.insert(mealItems).values(itemRows(items).map((r) => ({ ...r, mealId: meal!.id })));
-    return meal!;
-  });
+  const row = await insertMealRow(db, {
+    userId: user.id, eatenAt: body.eaten_at ?? new Date(), mealType: src.meal.mealType, notes: src.meal.notes,
+    aiStatus: "manual", ...totalColumns(items),
+  }, items);
   return c.json(await mealOut((await attachItems(db, [row]))[0]!, getStorage(c)), 201);
 });
