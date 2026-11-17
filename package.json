@@ -1,0 +1,13 @@
+{
+  "name": "nutrifoto",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Atalhos do ambiente Docker. Cada app (apps/worker, apps/web) tem o próprio package.json.",
+  "scripts": {
+    "docker:up": "docker compose up --build -V",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v --remove-orphans",
+    "docker:logs": "docker compose logs -f --tail=100",
+    "docker:invite": "docker compose exec worker npm run invite --"
+  }
+}
