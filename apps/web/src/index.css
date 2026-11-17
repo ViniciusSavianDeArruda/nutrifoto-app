@@ -1,0 +1,59 @@
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/600.css";
+@import "@fontsource/figtree/700.css";
+@import "@fontsource/barlow-semi-condensed/500.css";
+@import "@fontsource/barlow-semi-condensed/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-night: 22 83 60;
+  --c-night-deep: 14 58 41;
+  --c-ground: 246 248 245;
+  --c-surface: 255 255 255;
+  --c-line: 208 220 205;
+  --c-ink: 20 38 28;
+  --c-soft: 74 96 82;
+  --c-yolk: 255 200 61;
+  --c-yolk-ink: 42 31 0;
+  --c-protein: 156 61 106;
+  --c-carb: 183 121 31;
+  --c-fat: 36 110 160;
+  --c-fiber: 47 125 91;
+  --c-notice: 138 90 0;
+  --c-notice-bg: 255 243 214;
+  --c-error: 163 42 31;
+  --c-error-bg: 253 233 230;
+}
+
+html { color-scheme: light; }
+html.num { font-family: "Barlow Semi Condensed", Figtree, sans-serif; font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 3px solid rgb(var(--c-yolk)); outline-offset: 2px; border-radius: 6px; }
+.auth-shell :focus-visible { outline: 3px solid rgb(var(--c-night)); outline-offset: 2px; }
+
+@layer components {
+  .btn { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md px-4 font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none; }
+  .btn-primary { @apply btn bg-night text-white hover:bg-night-deep; }
+  .btn-quiet { @apply btn border border-line bg-surface text-ink hover:bg-ground; }
+  .btn-danger { @apply btn border border-error text-error bg-surface hover:bg-error-bg; }
+  .input { @apply min-h-[44px] w-full rounded-md border border-line bg-surface px-3 text-ink placeholder:text-soft/60; }
+  .label { @apply mb-1 block text-[0.8125rem] font-semibold text-soft; }
+  .card { @apply rounded-lg border border-line bg-surface; }
+}
+
+/* Único momento de movimento: a bandeja se enche ao abrir o dia. */
+@keyframes fill-in { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.tray-fill { transform-origin: bottom; animation: fill-in 600ms ease-out both; }
+
+@keyframes auth-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.auth-fade-in { animation: auth-fade-in 160ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tray-fill { animation: none; }
+  .auth-fade-in { animation: none; }
+  * { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+
+svg .tray-fill { transform-box: fill-box; }
