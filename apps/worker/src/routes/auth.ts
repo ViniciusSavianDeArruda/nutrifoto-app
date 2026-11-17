@@ -4,7 +4,7 @@ import { consumeToken, sendReset, sendVerification } from "../accounts";
 import { ApiError } from "../errors";
 import { checkRate } from "../limiter";
 import { clientIp, getMailer, getStorage, readImage, readJson, userView, type AppEnv } from "../lib";
-import { createAccessToken, hashPassword, verifyPassword } from "../security";
+import { createAccessToken, DUMMY_HASH, hashPassword, verifyPassword } from "../security";
 import { invites, meals, users } from "../schema";
 import { deleteAccountIn, forgotIn, loginIn, registerIn, resetIn, userUpdate, verifyIn } from "../schemas";
 import { requireUser } from "../middleware";
@@ -56,7 +56,9 @@ auth.post("/login", async (c) => {
   if (!checkRate(`auth:${clientIp(c)}`, 10, 60)) throw tooMany();
   const body = await readJson(c, loginIn);
   const [user] = await c.get("db").select().from(users).where(eq(users.email, body.email.toLowerCase())).limit(1);
-  if (!user || !(await verifyPassword(body.password, user.passwordHash))) {
+  // Sempre roda PBKDF2 (100k iterações) para igualar o tempo quando o e-mail não existe no banco.
+  const hash = user?.passwordHash ?? DUMMY_HASH;
+  if (!(await verifyPassword(body.password, hash)) || !user) {
     throw new ApiError(401, "bad_credentials", "E-mail ou senha incorretos.");
   }
   return c.json({ access_token: await createAccessToken(user.id, c.get("cfg"), user.passwordChangedAt?.getTime() ?? 0), token_type: "bearer" });
