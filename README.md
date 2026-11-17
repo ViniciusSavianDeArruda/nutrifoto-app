@@ -19,7 +19,7 @@ Diário alimentar para o celular: você fotografa a refeição, a IA **sugere** 
 
 O app tem só o tema claro.
 
-**Fora desta entrega** (decisão registrada em `docs/product.md`): leitura de código de barras e lembretes por notificação push.
+**Fora desta entrega** (decisão registrada em `PRODUCT.md`): leitura de código de barras e lembretes por notificação push.
 
 ## Rodar com Docker (um comando)
 
@@ -70,12 +70,19 @@ VITE_API_URL=http://localhost:8787 npm run dev   # http://localhost:5173
 
 Testes: `cd apps/worker && npm test` e `cd apps/web && npm test`.
 
+Drizzle Studio (inspecionar o banco no navegador):
+```bash
+cd apps/worker
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/nutrifoto" npm run db:studio
+# abre em https://local.drizzle.studio
+```
+
 ## Documentação
 
 | Arquivo | Conteúdo |
 |---|---|
-| `docs/product.md` | Produto: usuários, objetivos, princípios, escopo |
-| `docs/design.md` | Sistema visual: cores, tipografia, componentes |
+| `PRODUCT.md` | Produto: usuários, objetivos, princípios, escopo (raiz — exigência da Impeccable) |
+| `DESIGN.md` | Sistema visual: cores, tipografia, componentes (raiz — exigência da Impeccable) |
 | `docs/api-contract.md` | Todos os endpoints da API |
 | `docs/deploy.md` | Deploy no Supabase + Cloudflare; variáveis de ambiente; backup |
 | `docs/decisions.md` | Decisões de arquitetura com raciocínio |

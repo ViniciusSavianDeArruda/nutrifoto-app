@@ -2,10 +2,10 @@
 
 ## Este projeto (NutriFoto)
 
-Diário alimentar com foto. Leia `docs/product.md` (o que e para quem) e `docs/design.md` (visual) antes de mexer na interface.
+Diário alimentar com foto. Leia `PRODUCT.md` (o que e para quem) e `DESIGN.md` (visual) antes de mexer na interface.
 
 ```
-apps/worker  API: TypeScript + Hono + Drizzle, Cloudflare Workers.  npm test | npm run typecheck | npm run dev | npm run migrate | npm run invite
+apps/worker  API: TypeScript + Hono + Drizzle, Cloudflare Workers.  npm test | npm run typecheck | npm run dev | npm run migrate | npm run invite | DATABASE_URL=... npm run db:studio
 apps/web     React + Vite + Tailwind (PWA, JavaScript).                       npm test | npm run build | npm run dev
 ```
 
